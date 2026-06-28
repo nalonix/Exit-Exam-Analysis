@@ -1,8 +1,6 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 import { TOPICS, TOPIC_VALUES, GENDER_COLORS, INSTITUTION_PALETTE, hashString } from '../shared/constants.js';
 
-const DATA_PATH = path.resolve(process.cwd(), 'data', 'students_enriched.csv');
+import studentsCsv from '../../../data/students_enriched.csv?raw';
 
 function parseCsv(text) {
 	const rows = [];
@@ -415,10 +413,9 @@ function buildDataset(rawRows) {
 }
 
 async function loadDataset() {
-	const csv = await readFile(DATA_PATH, 'utf8');
-	const rawRows = parseCsv(csv);
+	const rawRows = parseCsv(studentsCsv);
 	if (!rawRows.length) {
-		throw new Error(`No rows found in ${DATA_PATH}`);
+		throw new Error('No rows found in students_enriched.csv');
 	}
 
 	return buildDataset(rawRows);
